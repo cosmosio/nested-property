@@ -1,0 +1,42 @@
+{
+  "name": "nested-property",
+  "description": "Read or write an array or object's nested property via a string like 'my.nested.property'",
+  "version": "0.0.1",
+  "homepage": "https://github.com/cosmosio/nested-property",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/cosmosio/nested-property/master/LICENSE"
+    }
+  ],
+  "files": [
+    "LICENSE",
+    "index.js"
+  ],
+  "author": "Olivier Scherrer <pode.fr@gmail.com>",
+  "keywords": [
+    "nested",
+    "property",
+    "object",
+    "array",
+    "read",
+    "write",
+    "get",
+    "set"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:cosmosio/nested-property.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cosmosio/nested-property/issues"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "mocha": "~1.18.2"
+  }
+}

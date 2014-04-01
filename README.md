@@ -84,8 +84,8 @@ var array = [
  }
 ];
 
-nestedProperty.set(array, "0.a.0", 10); // array[0].a[0] == 10;
-nestedProperty.set(array, "0.b.c", 1337); // array[0].b.c == 1337;
+nestedProperty.set(array, "0.a.0", 10); // array[0].a[0] == 10
+nestedProperty.set(array, "0.b.c", 1337); // array[0].b.c == 1337
 ```
 
 Caveat!

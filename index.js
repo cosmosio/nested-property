@@ -22,7 +22,7 @@ module.exports = {
  * @returns the object or the the property value if found
  */
 function getNestedProperty(object, property) {
-    if (object && object instanceof Object) {
+    if (object && typeof object == "object") {
         if (typeof property == "string" && property !== "") {
             var split = property.split(".");
             return split.reduce(function (obj, prop) {
@@ -47,7 +47,7 @@ function getNestedProperty(object, property) {
  * @returns object if no assignment was made or the value if the assignment was made
  */
 function setNestedProperty(object, property, value) {
-    if (object && object instanceof Object) {
+    if (object && typeof object == "object") {
         if (typeof property == "string" && property !== "") {
             var split = property.split(".");
             return split.reduce(function (obj, prop, idx) {

@@ -1,7 +1,7 @@
 {
   "name": "nested-property",
   "description": "Read or write an array or object's nested property via a string like 'my.nested.property'",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/cosmosio/nested-property",
   "licenses": [
     {

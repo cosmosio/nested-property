@@ -39,7 +39,13 @@ function getNestedProperty(object, property) {
     }
 }
 
-
+/**
+ * Tell if a nested object has a given property (or array a given index)
+ * given an object such as a.b.c.d = 5, hasNestedProperty(a, "b.c.d") will return true.
+ * @param {Object} object the object to get the property from
+ * @param {String} property the path to the property as a string
+ * @returns true if has (property in object), false otherwise
+ */
 function hasNestedProperty(object, property) {
     if (object && typeof object == "object") {
         if (typeof property == "string" && property !== "") {

@@ -3,7 +3,7 @@
 *
 * The MIT License (MIT)
 *
-* Copyright (c) 2014 Olivier Scherrer <pode.fr@gmail.com>
+* Copyright (c) 2014-2015 Olivier Scherrer <pode.fr@gmail.com>
 */
 "use strict";
 

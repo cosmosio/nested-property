@@ -69,6 +69,8 @@ describe("nested-property", function () {
             expect(sut.has(a, "b.c.d.e")).to.be.true;
             expect(sut.has(a, "b")).to.be.true;
             expect(sut.has(a, "b.e")).to.be.false;
+            expect(sut.has(b, 0)).to.be.true;
+            expect(sut.has(b, 1)).to.be.false;
         });
 
         it("should return true also if the property is undefined", function () {

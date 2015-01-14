@@ -19,7 +19,7 @@ Require nested-property:
 var nestedProperty = require("nested-property");
 ```
 
-You can get a nested property from an object:
+__You can get a nested property from an object:__
 
 ```js
 var object = {
@@ -55,7 +55,7 @@ nestedProperty.get(array, "0.a.b.0"); // returns 0
 nestedProperty.get(array, "1.a.b.c"); // returns undefined
 ```
 
-You can set a nested property on an object:
+__You can set a nested property on an object:__
 
 ```js
 var object = {
@@ -103,6 +103,30 @@ nestedProperty.set(object, "0.1.2", "new object");
   }  
 }
 ```
+
+__Finally, you can also test if a data structure has a nested property:__
+
+```js
+var array = [
+ {
+   a: [0, 1]
+ }
+];
+
+nestedProperty.has(array, "0.a"); // true
+nestedProperty.has(array, "0.a.1"); // true
+nestedProperty.has(array, "0.a.2"); // false
+nestedProperty.has(array, "1.a.0"); // false
+```
+
+
+
+CHANGELOG
+=========
+
+### 0.0.3 -  14 JAN 2015
+
+* Add hasNestedProperty with tests and documentation
 
 LICENSE
 =======

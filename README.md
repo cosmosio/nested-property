@@ -1,7 +1,7 @@
 Nested property
 =============
 
-Read or write an array or object's nested property via a string like 'my.nested.property'
+Read, write or test a data structure's nested property via a string like 'my.nested.property'. It works through arrays and objects.
 
 Installation
 ============

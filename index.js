@@ -11,8 +11,9 @@ var assert = require("assert");
 
 module.exports = {
   set: setNestedProperty,
-  get: getNestedProperty
-}
+  get: getNestedProperty,
+  has: hasNestedProperty
+};
 
 /**
  * Get the property of an object nested in one or more objects
@@ -35,6 +36,27 @@ function getNestedProperty(object, property) {
         }
     } else {
         return object;
+    }
+}
+
+
+function hasNestedProperty(object, property) {
+    if (object && typeof object == "object") {
+        if (typeof property == "string" && property !== "") {
+            var split = property.split(".");
+            return split.reduce(function (obj, prop, idx, array) {
+                if (idx == array.length - 1) {
+                    return !!(obj && prop in obj);
+                }
+                return obj && obj[prop];
+            }, object);
+        } else if (typeof property == "number") {
+            return property in object;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 }
 

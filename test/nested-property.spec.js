@@ -47,6 +47,50 @@ describe("nested-property", function () {
 		});
 	});
 
+    describe("has", function () {
+        var a = {b:{c:{d:{e:1, f:undefined}}}},
+            b = [{c:{d:10}}],
+            c = {d:[{e:20}]};
+
+        it("should be a function", function () {
+            expect(typeof sut.has).to.equal("function");
+        });
+
+        it("should tell if a property is in an object", function () {
+            expect(sut.has()).to.be.false;
+            expect(sut.has("")).to.be.false;
+            expect(sut.has("a.b.c.d.e")).to.be.false;
+            expect(sut.has(true)).to.be.false;
+            expect(sut.has(null)).to.be.false;
+            expect(sut.has(a)).to.be.false;
+            expect(sut.has(a.b)).to.be.false;
+            expect(sut.has(a.b, "")).to.be.false;
+            expect(sut.has(a, "b.c")).to.be.true
+            expect(sut.has(a, "b.c.d.e")).to.be.true;
+            expect(sut.has(a, "b")).to.be.true;
+            expect(sut.has(a, "b.e")).to.be.false;
+        });
+
+        it("should return true also if the property is undefined", function () {
+            expect(sut.has(a, "b.c.d.f")).to.be.true;
+        });
+
+        it("should tell if the property exists through an array too", function () {
+            expect(sut.has(b, "0.c.d")).to.be.true;
+            expect(sut.has(b, "1.c.d")).to.be.false;
+            expect(sut.has(c, "d.0.e")).to.be.true;
+            expect(sut.has(c, "d.1.e")).to.be.false;
+        });
+
+        it("should work with numbers as property", function () {
+            expect(sut.has(b, 0)).to.be.true;
+        });
+
+        it("should return false if nested property doesn't exist", function () {
+            expect(sut.has(a, "z.x.y")).to.be.false;
+        });
+    });
+
 	describe("set", function () {
 
 		var a = {b:{c:{d:{e:1}}}},

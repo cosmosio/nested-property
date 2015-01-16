@@ -119,6 +119,30 @@ nestedProperty.has(array, "0.a.2"); // false
 nestedProperty.has(array, "1.a.0"); // false
 ```
 
+If it must be a "own" property (i.e. not in the prototype chain) you can use the own option:
+
+```js
+function DataStructure() {}
+DataStructure.prototype.prop = true;
+
+var obj = new DataStructure();
+
+nestedProperty.has(obj, "prop", { own: true}); // false
+nestedProperty.has(obj, "prop"); // true
+```
+
+Alternatively, you can use the hasOwn function:
+
+```js
+function DataStructure() {}
+DataStructure.prototype.prop = true;
+
+var obj = new DataStructure();
+
+nestedProperty.hasOwn(obj, "prop"); // false
+```
+
+
 
 
 CHANGELOG

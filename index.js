@@ -14,7 +14,7 @@ module.exports = {
   get: getNestedProperty,
   has: hasNestedProperty,
   hasOwn: function (object, property, options) {
-      return hasNestedProperty(object, property, options || {own: true});
+      return this.has(object, property, options || {own: true});
   }
 };
 

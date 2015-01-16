@@ -8,6 +8,7 @@
 var sut = require("../index");
 
 var chai = require("chai"),
+    sinon = require("sinon"),
 	expect = chai.expect;
 
 describe("nested-property", function () {
@@ -110,58 +111,19 @@ describe("nested-property", function () {
     });
 
     describe("hasOwn", function () {
-        var a = {b:{c:{d:{e:1, f:undefined, g: Object.create({h:true})}}}},
-            b = [{c:{d:10}}],
-            c = {d:[{e:20}]};
+        var obj, prop;
 
-        it("should be a function", function () {
-            expect(typeof sut.hasOwn).to.equal("function");
+        beforeEach(function () {
+            sinon.spy(sut, "has");
+
+            obj = {};
+            prop = "prop";
+
+            sut.hasOwn(obj, prop);
         });
 
-        it("should tell if a property is in an object", function () {
-            expect(sut.hasOwn()).to.be.false;
-            expect(sut.hasOwn("")).to.be.false;
-            expect(sut.hasOwn("a.b.c.d.e")).to.be.false;
-            expect(sut.hasOwn(true)).to.be.false;
-            expect(sut.hasOwn(null)).to.be.false;
-            expect(sut.hasOwn(a)).to.be.false;
-            expect(sut.hasOwn(a.b)).to.be.false;
-            expect(sut.hasOwn(a.b, "")).to.be.false;
-            expect(sut.hasOwn(a, "b.c")).to.be.true
-            expect(sut.hasOwn(a, "b.c.d.e")).to.be.true;
-            expect(sut.hasOwn(a, "b")).to.be.true;
-            expect(sut.hasOwn(a, "b.e")).to.be.false;
-            expect(sut.hasOwn(b, 0)).to.be.true;
-            expect(sut.hasOwn(b, 1)).to.be.false;
-        });
-
-        it("should return true also if the property is undefined", function () {
-            expect(sut.hasOwn(a, "b.c.d.f")).to.be.true;
-        });
-
-        it("should tell if the property exists through an array too", function () {
-            expect(sut.hasOwn(b, "0.c.d")).to.be.true;
-            expect(sut.hasOwn(b, "1.c.d")).to.be.false;
-            expect(sut.hasOwn(c, "d.0.e")).to.be.true;
-            expect(sut.hasOwn(c, "d.1.e")).to.be.false;
-        });
-
-        it("should work with numbers as property", function () {
-            expect(sut.hasOwn(b, 0)).to.be.true;
-        });
-
-        it("should return false if nested property doesn't exist", function () {
-            expect(sut.hasOwn(a, "z.x.y")).to.be.false;
-        });
-
-        it("shouldn't throw when trying to access a property through a non object value", function () {
-            expect(function () {
-                expect(sut.has(a, "b.c.d.e.h")).to.be.false;
-            }).not.to.throw();
-        });
-
-        it("should return false if nested property is in the prototype", function () {
-            expect(sut.hasOwn(a, "b.c.d.g.h")).to.be.false;
+        it("should call has with the own option set to true", function () {
+            expect(sut.has.calledWith(obj, prop, {own: true})).to.be.true;
         });
     });
 

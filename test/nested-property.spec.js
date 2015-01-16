@@ -101,6 +101,12 @@ describe("nested-property", function () {
         it("should return true if nested property is in the prototype", function () {
             expect(sut.has(a, "b.c.d.g.h")).to.be.true;
         });
+
+        describe("WHEN the own options is set", function () {
+            it("THEN returns false if nested property is in the prototype", function () {
+                expect(sut.has(a, "b.c.d.g.h", {own: true})).to.be.false;
+            });
+        });
     });
 
     describe("hasOwn", function () {

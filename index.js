@@ -12,7 +12,14 @@ var assert = require("assert");
 module.exports = {
   set: setNestedProperty,
   get: getNestedProperty,
-  has: hasNestedProperty,
+  has: function () {
+      var options = arguments[2];
+      if (options && options.own) {
+          return hasOwnNestedProperty.apply(null, arguments);
+      } else {
+          return hasNestedProperty.apply(null, arguments);
+      }
+  },
   hasOwn: hasOwnNestedProperty
 };
 

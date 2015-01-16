@@ -134,23 +134,23 @@ nestedProperty.has(obj, "prop"); // true
 Alternatively, you can use the hasOwn function:
 
 ```js
-function DataStructure() {}
-DataStructure.prototype.prop = true;
-
-var obj = new DataStructure();
+var obj = Object.create({prop: true});
 
 nestedProperty.hasOwn(obj, "prop"); // false
 ```
 
 
-
-
 CHANGELOG
 =========
 
-### 0.0.3 -  14 JAN 2015
+### 0.0.4 - 15 JAN 2015
 
-* Add hasNestedProperty with tests and documentation
+* Add {own: true} option to .has to ensure that a nested property isn't coming from the prototype chain
+* Add hasOwn, that calls .has with the {own: true} option
+
+### 0.0.3 - 14 JAN 2015
+
+* Add has with tests and documentation
 
 LICENSE
 =======

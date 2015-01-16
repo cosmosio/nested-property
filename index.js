@@ -12,7 +12,8 @@ var assert = require("assert");
 module.exports = {
   set: setNestedProperty,
   get: getNestedProperty,
-  has: hasNestedProperty
+  has: hasNestedProperty,
+  hasOwn: hasOwnNestedProperty
 };
 
 /**
@@ -42,20 +43,42 @@ function getNestedProperty(object, property) {
 /**
  * Tell if a nested object has a given property (or array a given index)
  * given an object such as a.b.c.d = 5, hasNestedProperty(a, "b.c.d") will return true.
+ * It also returns true if the property is in the prototype chain.
  * @param {Object} object the object to get the property from
  * @param {String} property the path to the property as a string
  * @returns true if has (property in object), false otherwise
  */
 function hasNestedProperty(object, property) {
+    return accessProperty(object, property, function (obj, prop, idx, array) {
+        if (idx == array.length - 1) {
+            return !!(obj !== null && typeof obj == "object" && prop in obj);
+        }
+        return obj && obj[prop];
+    });
+}
+
+/**
+ * Tell if a nested object has a given own property (or array a given index)
+ * given an object such as a.b.c.d = 5, hasNestedProperty(a, "b.c.d") will return true.
+ * It return false if the property is in the prototype chain.
+ * @param {Object} object the object to get the property from
+ * @param {String} property the path to the property as a string
+ * @returns true if has (property in object), false otherwise
+ */
+function hasOwnNestedProperty(object, property) {
+    return accessProperty(object, property, function (obj, prop, idx, array) {
+        if (idx == array.length - 1) {
+            return !!(obj && obj.hasOwnProperty(prop));
+        }
+        return obj && obj[prop];
+    });
+}
+
+function accessProperty(object, property, callback) {
     if (object && typeof object == "object") {
         if (typeof property == "string" && property !== "") {
             var split = property.split(".");
-            return split.reduce(function (obj, prop, idx, array) {
-                if (idx == array.length - 1) {
-                    return !!(obj && prop in obj);
-                }
-                return obj && obj[prop];
-            }, object);
+            return split.reduce(callback, object);
         } else if (typeof property == "number") {
             return property in object;
         } else {

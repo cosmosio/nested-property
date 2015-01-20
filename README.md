@@ -104,7 +104,7 @@ nestedProperty.set(object, "0.1.2", "new object");
 }
 ```
 
-__Finally, you can also test if a data structure has a nested property:__
+__You can also test if a data structure has a nested property:__
 
 ```js
 var array = [
@@ -118,6 +118,8 @@ nestedProperty.has(array, "0.a.1"); // true
 nestedProperty.has(array, "0.a.2"); // false
 nestedProperty.has(array, "1.a.0"); // false
 ```
+
+The example shows that it works through array, but of course, plain objects are fine too.
 
 If it must be a "own" property (i.e. not in the prototype chain) you can use the own option:
 
@@ -139,9 +141,49 @@ var obj = Object.create({prop: true});
 nestedProperty.hasOwn(obj, "prop"); // false
 ```
 
+___And finally, you can test if an object is on the path to a nested property:___
+
+```js
+var obj = {
+    nested: [
+        {
+            property: true
+        }
+    ]
+};
+
+nestedProperty.isIn(obj, "nested.0.property", obj); // true
+nestedProperty.isIn(obj, "nested.0.property", obj.nested); // true
+nestedProperty.isIn(obj, "nested.0.property", obj.nested[0]); // true
+
+nestedProperty.isIn(obj, "nested.0.property", {}); // false
+```
+
+The path doesn't have to be valid to return true:
+
+```js
+nestedProperty.isIn(obj, "nested.0.property.foo.bar.path", obj.nested[0]); // true
+```
+
+Unless the `validPath` option is set to `true`:
+
+```js
+nestedProperty.isIn(obj, "nested.0.property.foo.bar.path", obj.nested[0], { validPath: true }); // false
+```
+
+Note that if instead of an object you give it the value of the nested property, it'll return true:
+
+```js
+nestedProperty.isIn(obj, "nested.0.property", obj.nested[0].property); // true
+nestedProperty.isIn(obj, "nested.0.property", true); // true
+```
 
 CHANGELOG
 =========
+
+### 0.0.5 - 19 JAN 2015
+
+* Add isIn, to tell if an object is on the path to a nested property.
 
 ### 0.0.4 - 15 JAN 2015
 

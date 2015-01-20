@@ -119,7 +119,7 @@ describe("nested-property", function () {
         });
     });
 
-    describe.only("isIn", function () {
+    describe("isIn", function () {
 
         var a = {b:{c:{d:1}}},
             b = [{c:{d:1}}];
@@ -144,10 +144,13 @@ describe("nested-property", function () {
            expect(sut.isIn(b, "0.c.d", a)).to.be.false;
         });
 
-        it("should return false if an object is on the path to a nested property but the path is incorrect", function () {
-            expect(sut.isIn(b, "b.c.d", b)).to.be.false;
+        it("should return true if an object is on the path to a nested property but the path is incorrect", function () {
+            expect(sut.isIn(b, "b.c.d", b)).to.be.true;
         });
 
+        it("should return false if an object is on the path to a nested property but the path is incorrect and validPath is set to true", function () {
+            expect(sut.isIn(b, "b.c.d", b, { validPath: true })).to.be.false;
+        });
     });
 
 	describe("set", function () {

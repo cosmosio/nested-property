@@ -115,9 +115,13 @@ function setNestedProperty(object, property, value) {
  * @param {Object} object to get the nested property from
  * @param {String} property name of the nested property
  * @param {Object} objectInPath the object to check
+ * @param {Object} options:
+ *  - validPath: return false if the path is invalid, even if the object is in the path
  * @returns {boolean} true if the object is on the path
  */
-function isInNestedProperty(object, property, objectInPath) {
+function isInNestedProperty(object, property, objectInPath, options) {
+    options = options || {};
+
     if (object && typeof object == "object") {
         if (typeof property == "string" && property !== "") {
             var split = property.split("."),
@@ -129,7 +133,11 @@ function isInNestedProperty(object, property, objectInPath) {
                 return obj && obj[prop];
             }, object);
 
-            return isIn && pathExists;
+            if (options.validPath) {
+                return isIn && pathExists;
+            } else {
+                return isIn;
+            }
         } else {
             return false;
         }

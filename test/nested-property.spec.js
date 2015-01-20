@@ -16,10 +16,6 @@ describe("nested-property", function () {
 		var a = {b:{c:{d:{e:1}}}},
 			b = [{c:{d:10}}];
 
-		it("should be a function", function () {
-			expect(typeof sut.set).to.equal("function");
-		});
-
 		it("should return the property value", function () {
 			expect(sut.get()).to.be.undefined;
 			expect(sut.get("")).to.equal("");
@@ -52,10 +48,6 @@ describe("nested-property", function () {
         var a = {b:{c:{d:{e:1, f:undefined, g: Object.create({h:true})}}}},
             b = [{c:{d:10}}],
             c = {d:[{e:20}]};
-
-        it("should be a function", function () {
-            expect(typeof sut.has).to.equal("function");
-        });
 
         it("should tell if a property is in an object", function () {
             expect(sut.has()).to.be.false;
@@ -127,14 +119,12 @@ describe("nested-property", function () {
         });
     });
 
+
+
 	describe("set", function () {
 
 		var a = {b:{c:{d:{e:1}}}},
 			b = [{c:{d:10}}];
-
-		it("should be a function", function () {
-			expect(typeof sut.set).to.equal("function");
-		});
 
 		it("should set the property value", function () {
 			var obj = {};

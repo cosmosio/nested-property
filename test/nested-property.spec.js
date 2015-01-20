@@ -119,7 +119,36 @@ describe("nested-property", function () {
         });
     });
 
+    describe.only("isIn", function () {
 
+        var a = {b:{c:{d:1}}},
+            b = [{c:{d:1}}];
+
+        it("should tell if a an object is on the path to a nested property", function () {
+            expect(sut.isIn(a, "b.c.d", a)).to.be.true;
+            expect(sut.isIn(a, "b.c.d", a.b)).to.be.true;
+            expect(sut.isIn(a, "b.c.d", a.b.c)).to.be.true;
+            expect(sut.isIn(a, "b.c.d", a.b.c.d)).to.be.true;
+        });
+
+        it("should tell if an object is on the path to a nested property through arrays too", function () {
+            expect(sut.isIn(b, "0.c", b)).to.be.true;
+            expect(sut.isIn(b, "0.c.d", b[0].c)).to.be.true;
+            expect(sut.isIn(b, "0.c.d", b[0].c.d)).to.be.true;
+        });
+
+        it("should return false if an object isn't on the path to a nested property", function () {
+           expect(sut.isIn()).to.be.false;
+           expect(sut.isIn(a, "b.c.d")).to.be.false;
+           expect(sut.isIn(a, "b.c.d", b)).to.be.false;
+           expect(sut.isIn(b, "0.c.d", a)).to.be.false;
+        });
+
+        it("should return false if an object is on the path to a nested property but the path is incorrect", function () {
+            expect(sut.isIn(b, "b.c.d", b)).to.be.false;
+        });
+
+    });
 
 	describe("set", function () {
 

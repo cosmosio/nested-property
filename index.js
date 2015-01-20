@@ -15,7 +15,8 @@ module.exports = {
   has: hasNestedProperty,
   hasOwn: function (object, property, options) {
       return this.has(object, property, options || {own: true});
-  }
+  },
+  isIn: isInNestedProperty
 };
 
 /**
@@ -105,5 +106,34 @@ function setNestedProperty(object, property, value) {
         }
     } else {
         return object;
+    }
+}
+
+/**
+ * Tell if an object is on the path to a nested property
+ * If the object is on the path, and the path exists, it returns true, and false otherwise.
+ * @param {Object} object to get the nested property from
+ * @param {String} property name of the nested property
+ * @param {Object} objectInPath the object to check
+ * @returns {boolean} true if the object is on the path
+ */
+function isInNestedProperty(object, property, objectInPath) {
+    if (object && typeof object == "object") {
+        if (typeof property == "string" && property !== "") {
+            var split = property.split("."),
+                isIn = false,
+                pathExists;
+
+            pathExists = !!split.reduce(function (obj, prop) {
+                isIn = isIn || obj === objectInPath || obj[prop] === objectInPath;
+                return obj && obj[prop];
+            }, object);
+
+            return isIn && pathExists;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 }

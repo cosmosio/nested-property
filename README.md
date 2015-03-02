@@ -181,6 +181,10 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 CHANGELOG
 =========
 
+### 0.0.6 - 01 MAR 2015
+
+* Fix a bug where an invalid path to search an object into is invalid and the isInNestedProperty would throw an error instead of return false
+
 ### 0.0.5 - 19 JAN 2015
 
 * Add isIn, to tell if an object is on the path to a nested property.

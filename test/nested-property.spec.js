@@ -138,10 +138,11 @@ describe("nested-property", function () {
         });
 
         it("should return false if an object isn't on the path to a nested property", function () {
-           expect(sut.isIn()).to.be.false;
-           expect(sut.isIn(a, "b.c.d")).to.be.false;
-           expect(sut.isIn(a, "b.c.d", b)).to.be.false;
-           expect(sut.isIn(b, "0.c.d", a)).to.be.false;
+            expect(sut.isIn()).to.be.false;
+            expect(sut.isIn(a, "b.c.d")).to.be.false;
+            expect(sut.isIn(a, "b.c.d", b)).to.be.false;
+            expect(sut.isIn(b, "0.c.d", a)).to.be.false;
+            expect(sut.isIn(b, "2.c.d", a)).to.be.false;
         });
 
         it("should return true if an object is on the path to a nested property but the path is incorrect", function () {

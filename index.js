@@ -129,7 +129,7 @@ function isInNestedProperty(object, property, objectInPath, options) {
                 pathExists;
 
             pathExists = !!split.reduce(function (obj, prop) {
-                isIn = isIn || obj === objectInPath || obj[prop] === objectInPath;
+                isIn = isIn || obj === objectInPath || (!!obj && obj[prop] === objectInPath);
                 return obj && obj[prop];
             }, object);
 

@@ -7,8 +7,6 @@
 */
 "use strict";
 
-var assert = require("assert");
-
 module.exports = {
   set: setNestedProperty,
   get: getNestedProperty,

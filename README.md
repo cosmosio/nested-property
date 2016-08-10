@@ -100,7 +100,7 @@ nestedProperty.set(object, "0.1.2", "new object");
     "1": {
       "2": "new object"
     }
-  }  
+  }
 }
 ```
 
@@ -180,6 +180,10 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 
 CHANGELOG
 =========
+
+### 0.0.7 - 09 AUG 2016
+
+* [Remove unused require('assert')](https://github.com/cosmosio/nested-property/pull/1), thanks to [Nilz11](https://github.com/Nilz11)
 
 ### 0.0.6 - 01 MAR 2015
 

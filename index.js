@@ -90,7 +90,7 @@ function setNestedProperty(object, property, value) {
         if (typeof property == "string" && property !== "") {
             var split = property.split(".");
             return split.reduce(function (obj, prop, idx) {
-                obj[prop] = obj[prop] || {};
+                obj[prop] = obj[prop] || (!(isNaN(prop)) ? {} : []);
                 if (split.length == (idx + 1)) {
                     obj[prop] = value;
                 }

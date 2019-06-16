@@ -91,7 +91,7 @@ function setNestedProperty(object, property, value) {
             var split = property.split(".");
             return split.reduce(function (obj, prop, idx) {
                 const nextPropIsNumber = Number.isInteger(Number.parseInt(split[idx+1]))
-                obj[prop] = obj[prop] || nextPropIsNumber ? [] : {}
+                obj[prop] = obj[prop] || (nextPropIsNumber ? [] : {})
                 if (split.length == (idx + 1)) {
                     obj[prop] = value;
                 }

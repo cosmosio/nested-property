@@ -176,10 +176,17 @@ describe("nested-property", function () {
 
 		it("should set the property through an array too", function () {
 			expect(sut.set(b, "0.c.d", 20)).to.equal(20);
-			expect(b[0].c.d).to.equal(20);
+            expect(b[0].c.d).to.equal(20);
+
 		});
 
-		it("should work with numbers as property", function () {
+        it('should create an array inside the object', function () {
+            expect(sut.set(b, "0.e.0", 30)).to.equal(30);
+            expect(b[0].e).to.be.an('array');
+            expect(b[0].e[0]).to.be.equal(30);
+        });
+
+        it("should work with numbers as property", function () {
 			expect(sut.set(b, 0, 20)).to.equal(20);
 			expect(b[0]).to.equal(20);
 		});

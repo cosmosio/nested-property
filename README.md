@@ -181,6 +181,10 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 CHANGELOG
 =========
 
+### 1.0.1 - 22 JUNE 209
+
+* Update to mocha 6.4.1 to remove security alerts on dependencies
+
 ### 1.0.0 - 22 JUNE 2019
 
 * Breaking Change: When calling `set()` with an integer in the path and `nested-property` creates an object at the location, the object is now an array instead of an object. Hopefully, no user of the `nested-property` package should have been expecting to see an object instead of an array, but this constitutes a breaking changes, hence the major update in the semver.

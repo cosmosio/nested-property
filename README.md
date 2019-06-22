@@ -181,6 +181,12 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 CHANGELOG
 =========
 
+### 1.0.0 - 22 JUNE 2019
+
+* Breaking Change: When calling `set()` with an integer in the path and `nested-property` creates an object at the location, the object is now an array instead of an object. Hopefully, no user of the `nested-property` package should have been expecting to see an object instead of an array, but this constitutes a breaking changes, hence the major update in the semver.
+
+Thanks [igor-barbosa](https://github.com/igor-barbosa) for the suggestion: [PR #2](https://github.com/cosmosio/nested-property/pull/2)
+
 ### 0.0.7 - 09 AUG 2016
 
 * [Remove unused require('assert')](https://github.com/cosmosio/nested-property/pull/1), thanks to [Nilz11](https://github.com/Nilz11)

@@ -181,7 +181,11 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 CHANGELOG
 =========
 
-### 1.0.1 - 22 JUNE 209
+### 1.0.2 - 20 NOV 2019
+
+* Update package-lock and remove yarn.lock to remove security alerts on dependencies
+
+### 1.0.1 - 22 JUNE 2019
 
 * Update to mocha 6.4.1 to remove security alerts on dependencies
 

@@ -3,7 +3,7 @@
 *
 * The MIT License (MIT)
 *
-* Copyright (c) 2014-2019 Olivier Scherrer <pode.fr@gmail.com>
+* Copyright (c) 2014-2020 Olivier Scherrer <pode.fr@gmail.com>
 */
 const chai = require("chai");
 
@@ -12,17 +12,17 @@ const expect = chai.expect;
 const sut = require("../index");
 
 describe("nested-property.set()", function () {
-    describe("Given no value", function () {
-        describe("When no value is passed without a path and no value to set", function () {
-            it("Then set returns undefined", function () {
+    describe("Given an undefined value", function () {
+        describe("When calling set() without a path And an undefined value to set", function () {
+            it("Then returns undefined", function () {
                 expect(sut.set()).to.be.undefined;
             });
         });
     });
 
     describe("Given a primitive value", function () {
-        describe("When a primitive value is passed without a path no value to set", function () {
-            it("Then set returns the primitive value", function () {
+        describe("When calling set() without a path And an undefined value to set", function () {
+            it("Then returns the primitive value", function () {
                 expect(sut.set("")).to.equal("");
                 expect(sut.set(true)).to.equal(true);
                 expect(sut.set(null)).to.equal(null);
@@ -38,7 +38,7 @@ describe("nested-property.set()", function () {
             emptyObject = {};
         });
 
-        describe("When a path is passed with a primitive value", function () {
+        describe("When calling set() with a path And a primitive value", function () {
             let result;
 
             beforeEach(function () {
@@ -49,12 +49,12 @@ describe("nested-property.set()", function () {
                 expect(emptyObject.a).to.equal(0);
             });
 
-            it("Then set returns the primitive value", function () {
+            it("Then returns the primitive value", function () {
                 expect(result).to.equal(0);
-            })
+            });
         });
 
-        describe("When a deep path is passed with a primitive value", function () {
+        describe("When calling set() with a deep path And a primitive value", function () {
             let result;
 
             beforeEach(function () {
@@ -65,14 +65,13 @@ describe("nested-property.set()", function () {
                 expect(emptyObject.a.b.c).to.equal(0);
             });
 
-            it("Then set returns the primitive value", function () {
+            it("Then returns the primitive value", function () {
                 expect(result).to.equal(0);
-            })
+            });
         });
 
-        describe("When a deep path is passed with an object", function () {
-            let result;
-            let anObject;
+        describe("When calling set() with a deep path And an object", function () {
+            let result, anObject;
 
             beforeEach(function () {
                 anObject = {
@@ -88,12 +87,12 @@ describe("nested-property.set()", function () {
                 expect(emptyObject.a.b.c.d.e.f).to.equal(10);
             });
 
-            it("Then set returns the primitive value", function () {
+            it("Then returns the object", function () {
                 expect(result).to.equal(anObject);
             });
         });
 
-        describe("When a deep path containing an integer is passed with a primitive value", function () {
+        describe("When calling set() with a deep path And an integer And the path contains an array index", function () {
             let result;
 
             beforeEach(function () {
@@ -104,11 +103,11 @@ describe("nested-property.set()", function () {
                 expect(emptyObject.a.b[0].d).to.equal(20);
             });
 
-            it("Then set returns the primitive value", function () {
+            it("Then returns the primitive value", function () {
                 expect(result).to.equal(20);
             });
 
-            it("Then set creates an array", function () {
+            it("Then creates an array at the array index position", function () {
                 expect(emptyObject.a.b).to.be.an("array");
                 expect(emptyObject.a.b.length).to.equal(1);
             });
@@ -128,9 +127,8 @@ describe("nested-property.set()", function () {
             };
         });
 
-        describe("When a path resolves to a proprety in the object", function () {
-            let result;
-            let anObject;
+        describe("When calling set() with a path that resolves to a proprety in the object", function () {
+            let result, anObject;
 
             beforeEach(function () {
                 anObject = {
@@ -145,7 +143,7 @@ describe("nested-property.set()", function () {
                 expect(complexObject.a.b.f.g).to.equal(30);
             });
 
-            it("Then set returns the object", function () {
+            it("Then returns the object", function () {
                 expect(result).to.equal(anObject);
             });
         });
@@ -174,12 +172,12 @@ describe("nested-property.set()", function () {
                             }
                         }
                     ]
-                }];
+                }
+            ];
         });
 
-        describe("When a path resolves to a proprety in the array", function () {
-            let result;
-            let anObject;
+        describe("When calling set() with a path that resolves to a proprety in the array", function () {
+            let result, anObject;
 
             beforeEach(function () {
                 anObject = {
@@ -194,12 +192,12 @@ describe("nested-property.set()", function () {
                 expect(complexArray[0].a.b.f.g).to.equal(30);
             });
 
-            it("Then set returns the object", function () {
+            it("Then returns the object", function () {
                 expect(result).to.equal(anObject);
             });
         });
 
-        describe("When a path resolves to a deep proprety in the array", function () {
+        describe("When calling set() with a path that resolves to a deep proprety in the array", function () {
             let result;
             let anObject;
 
@@ -216,12 +214,12 @@ describe("nested-property.set()", function () {
                 expect(complexArray[1].a[1].b.f.g).to.equal(30);
             });
 
-            it("Then set returns the object", function () {
+            it("Then returns the object", function () {
                 expect(result).to.equal(anObject);
             });
         });
 
-        describe("When a path doesn't resolve to a deep proprety in the array", function () {
+        describe("When calling set() with a path doesn't resolve to a deep proprety in the array", function () {
             let result;
             let anObject;
 
@@ -238,12 +236,135 @@ describe("nested-property.set()", function () {
                 expect(complexArray[2].b[3].c.f.g).to.equal(30);
             });
 
-            it("Then set returns the object", function () {
+            it("Then returns the object", function () {
                 expect(result).to.equal(anObject);
             });
 
-            it("Then creates array when integers appear in the path", function () {
+            it("Then creates an array where an array index appears in the path", function () {
                 expect(complexArray[2].b).to.be.an("array");
+            });
+        });
+    });
+
+    describe("Given nested arrays", function () {
+        let nestedArray;
+
+        beforeEach(function () {
+            nestedArray = [
+                {
+                    name: "alpha",
+                    age: 34,
+                    emails: [
+                        "alpha-1@alpha.com",
+                        "alpha-2@alpha.com"
+                    ]
+                },
+                {
+                    name: "bravo",
+                    age: 45,
+                    emails: [
+                        "bravo-1@bravo.com",
+                        "bravo-2@bravo.com"
+                    ]
+                },
+                {
+                    name: "charlie",
+                    age: 64,
+                    emails: [
+                        "charlie-1@charlie.com",
+                        "charlie-2@charlie.com"
+                    ]
+                },
+                {
+                    age: 53,
+                    emails: [
+                        "delta-1@delta.com",
+                        "delta-2@delta.com"
+                    ]
+                }
+            ];
+        });
+
+        describe("When calling set() on a nested field", function () {
+            beforeEach(function () {
+                sut.set(nestedArray, "+.name", "<redacted>");
+            });
+
+            it("Then sets the matching fields to the new value", function () {
+                expect(nestedArray[0].name).to.equal("<redacted>");
+                expect(nestedArray[1].name).to.equal("<redacted>");
+                expect(nestedArray[2].name).to.equal("<redacted>");
+            });
+
+            it("Then doesn't affect the other fields", function () {
+                expect(nestedArray[0].age).to.equal(34);
+                expect(nestedArray[1].age).to.equal(45);
+                expect(nestedArray[2].age).to.equal(64);
+            });
+
+            it("Then creates the missing matching fields", function () {
+                expect(nestedArray[3].name).to.equal("<redacted>");
+            });
+        });
+
+        describe("When calling set() on an item nested within a nested array", function () {
+            beforeEach(function () {
+                sut.set(nestedArray, "+.emails.1", "<redacted>");
+            });
+
+            it("Then sets the fields to the new value", function () {
+                expect(nestedArray[0].emails[1]).to.equal("<redacted>");
+                expect(nestedArray[1].emails[1]).to.equal("<redacted>");
+                expect(nestedArray[2].emails[1]).to.equal("<redacted>");
+            });
+
+            it("Then doesn't affect the other nested items", function () {
+                expect(nestedArray[0].emails[0]).to.equal("alpha-1@alpha.com");
+                expect(nestedArray[1].emails[0]).to.equal("bravo-1@bravo.com");
+                expect(nestedArray[2].emails[0]).to.equal("charlie-1@charlie.com");
+            });
+        });
+
+        describe("When calling set() on all items within the nested arrays", function () {
+            beforeEach(function () {
+                sut.set(nestedArray, "+.emails.+", "<redacted>");
+            });
+
+            it("Then sets the fields to the new value", function () {
+                expect(nestedArray[0].emails[0]).to.equal("<redacted>");
+                expect(nestedArray[0].emails[1]).to.equal("<redacted>");
+                expect(nestedArray[1].emails[0]).to.equal("<redacted>");
+                expect(nestedArray[1].emails[1]).to.equal("<redacted>");
+                expect(nestedArray[2].emails[0]).to.equal("<redacted>");
+                expect(nestedArray[2].emails[1]).to.equal("<redacted>");
+            });
+        });
+    });
+
+    describe("Given empty object", function () {
+        let emptyObject;
+
+        beforeEach(function () {
+            emptyObject = {};
+        });
+
+        describe("When calling set() on a nested property using a wildcard", function () {
+            beforeEach(function () {
+                sut.set(emptyObject, "nestedArray.+", "newValue");
+            });
+
+            it("Then creates an empty array", function () {
+                expect(emptyObject.nestedArray).to.eql([]);
+            });
+        });
+
+        describe("When calling set() on a nested property using a wildcard", function () {
+            beforeEach(function () {
+                sut.set(emptyObject, "nestedArray.+.a", "newValue");
+            });
+
+            it("Then creates an empty array", function () {
+                expect(emptyObject.nestedArray).to.eql([]);
             });
         });
     });

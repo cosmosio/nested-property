@@ -181,6 +181,15 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 CHANGELOG
 =========
 
+### 2.0.0-beta.1 - 22 JAN 2020
+
+* Add array wildcard `+` to access all properties nested within an array. For example:
+
+```js
+// sets all `name` property in the array to "<redacteded>"
+nestedProperty.set(array, "+.name", "<redacted>"); 
+```
+
 ### 1.0.4 - 18 JAN 2020
 
 * Fix license field in package.json. Thanks [zr87](https://github.com/zr87) for raising the issue!

@@ -3,7 +3,7 @@
 *
 * The MIT License (MIT)
 *
-* Copyright (c) 2014-2019 Olivier Scherrer <pode.fr@gmail.com>
+* Copyright (c) 2014-2020 Olivier Scherrer <pode.fr@gmail.com>
 */
 const chai = require("chai");
 const sinon = require("sinon");

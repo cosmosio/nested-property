@@ -7,36 +7,47 @@
 */
 "use strict";
 
+const ARRAY_WILDCARD = "+";
+const PATH_DELIMITER = ".";
+
 module.exports = {
-  set: setNestedProperty,
-  get: getNestedProperty,
-  has: hasNestedProperty,
-  hasOwn: function (object, property, options) {
-      return this.has(object, property, options || {own: true});
-  },
-  isIn: isInNestedProperty
+    set: setNestedProperty,
+    get: getNestedProperty,
+    has: hasNestedProperty,
+    hasOwn: function (object, property, options) {
+        return this.has(object, property, options || { own: true });
+    },
+    isIn: isInNestedProperty
 };
 
 /**
- * Get the property of an object nested in one or more objects
- * given an object such as a.b.c.d = 5, getNestedProperty(a, "b.c.d") will return 5.
+ * Get the property of an object nested in one or more objects or array
+ * Given an object such as a.b.c.d = 5, getNestedProperty(a, "b.c.d") will return 5.
+ * It also works through arrays. Given a nested array such as a[0].b = 5, getNestedProperty(a, "0.b") will return 5.
+ * For accessing nested properties through all items in an array, you may use the array wildcard "+".
+ * For instance, getNestedProperty([{a:1}, {a:2}, {a:3}], "+.a") will return [1, 2, 3]
  * @param {Object} object the object to get the property from
  * @param {String} property the path to the property as a string
  * @returns the object or the the property value if found
  */
 function getNestedProperty(object, property) {
-    if (object && typeof object == "object") {
-        if (typeof property == "string" && property !== "") {
-            var split = property.split(".");
-            return split.reduce(function (obj, prop) {
-                return obj && obj[prop];
-            }, object);
-        } else if (typeof property == "number") {
-            return object[property];
-        } else {
-            return object;
-        }
-    } else {
+    if (typeof object != "object" || object === null) {
+        return object;
+    }
+
+    if (typeof property == "undefined") {
+        return object;
+    }
+
+    if (typeof property == "number") {
+        return object[property];
+    }
+
+    try {
+        return traverse(object, property, function _getNestedProperty(currentObject, currentProperty) {
+            return currentObject[currentProperty];
+        });
+    } catch (err) {
         return object;
     }
 }
@@ -51,28 +62,36 @@ function getNestedProperty(object, property) {
  *  - own: set to reject properties from the prototype
  * @returns true if has (property in object), false otherwise
  */
-function hasNestedProperty(object, property, options) {
-    options = options || {};
+function hasNestedProperty(object, property, options = {}) {
+    if (typeof object != "object" || object === null) {
+        return false;
+    }
 
-    if (object && typeof object == "object") {
-        if (typeof property == "string" && property !== "") {
-            var split = property.split(".");
-            return split.reduce(function (obj, prop, idx, array) {
-                if (idx == array.length - 1) {
-                    if (options.own) {
-                        return !!(obj && obj.hasOwnProperty(prop));
-                    } else {
-                        return !!(obj !== null && typeof obj == "object" && prop in obj);
-                    }
+    if (typeof property == "undefined") {
+        return false;
+    }
+
+    if (typeof property == "number") {
+        return property in object;
+    }
+
+    try {
+        let has = false;
+
+        traverse(object, property, function _hasNestedProperty(currentObject, currentProperty, segments, index) {
+            if (isLastSegment(segments, index)) {
+                if (options.own) {
+                    has = currentObject.hasOwnProperty(currentProperty);
+                } else {
+                    has = currentProperty in currentObject;
                 }
-                return obj && obj[prop];
-            }, object);
-        } else if (typeof property == "number") {
-            return property in object;
-        } else {
-            return false;
-        }
-    } else {
+            } else {
+                return currentObject && currentObject[currentProperty];
+            }
+        });
+
+        return has;
+    } catch (err) {
         return false;
     }
 }
@@ -86,25 +105,39 @@ function hasNestedProperty(object, property, options) {
  * @returns object if no assignment was made or the value if the assignment was made
  */
 function setNestedProperty(object, property, value) {
-    if (object && typeof object == "object") {
-        if (typeof property == "string" && property !== "") {
-            var split = property.split(".");
-            return split.reduce(function (obj, prop, idx) {
-                var nextPropIsNumber = Number.isInteger(Number(split[idx + 1]));
-                
-                obj[prop] = obj[prop] || (nextPropIsNumber ? [] : {})
-                if (split.length == (idx + 1)) {
-                    obj[prop] = value;
+    if (typeof object != "object" || object === null) {
+        return object;
+    }
+
+    if (typeof property == "undefined") {
+        return object;
+    }
+
+    if (typeof property == "number") {
+        object[property] = value;
+        return object[property];
+    }
+
+    try {
+        return traverse(object, property, function _setNestedProperty(currentObject, currentProperty, segments, index) {
+            if (!currentObject[currentProperty]) {
+                const nextPropIsNumber = Number.isInteger(Number(segments[index + 1]));
+                const nextPropIsArrayWildcard = segments[index + 1] === ARRAY_WILDCARD;
+
+                if (nextPropIsNumber || nextPropIsArrayWildcard) {
+                    currentObject[currentProperty] = [];
+                } else {
+                    currentObject[currentProperty] = {};
                 }
-                return obj[prop];
-            }, object);
-        } else if (typeof property == "number") {
-            object[property] = value;
-            return object[property];
-        } else {
-            return object;
-        }
-    } else {
+            }
+
+            if (isLastSegment(segments, index)) {
+                currentObject[currentProperty] = value;
+            }
+
+            return currentObject[currentProperty];
+        });
+    } catch (err) {
         return object;
     }
 }
@@ -119,29 +152,75 @@ function setNestedProperty(object, property, value) {
  *  - validPath: return false if the path is invalid, even if the object is in the path
  * @returns {boolean} true if the object is on the path
  */
-function isInNestedProperty(object, property, objectInPath, options) {
-    options = options || {};
-
-    if (object && typeof object == "object") {
-        if (typeof property == "string" && property !== "") {
-            var split = property.split("."),
-                isIn = false,
-                pathExists;
-
-            pathExists = !!split.reduce(function (obj, prop) {
-                isIn = isIn || obj === objectInPath || (!!obj && obj[prop] === objectInPath);
-                return obj && obj[prop];
-            }, object);
-
-            if (options.validPath) {
-                return isIn && pathExists;
-            } else {
-                return isIn;
-            }
-        } else {
-            return false;
-        }
-    } else {
+function isInNestedProperty(object, property, objectInPath, options = {}) {
+    if (typeof object != "object" || object === null) {
         return false;
     }
+
+    if (typeof property == "undefined") {
+        return false;
+    }
+
+    try {
+        let isIn = false,
+            pathExists = false;
+
+        traverse(object, property, function _isInNestedProperty(currentObject, currentProperty, segments, index) {
+            isIn = isIn ||
+                currentObject === objectInPath ||
+                (!!currentObject && currentObject[currentProperty] === objectInPath);
+
+            pathExists = isLastSegment(segments, index) &&
+                typeof currentObject === "object" &&
+                currentProperty in currentObject;
+
+            return currentObject && currentObject[currentProperty];
+        });
+
+        if (options.validPath) {
+            return isIn && pathExists;
+        } else {
+            return isIn;
+        }
+    } catch (err) {
+        return false;
+    }
+}
+
+function traverse(object, path, callback = () => { }) {
+    const segments = path.split(PATH_DELIMITER);
+    const length = segments.length;
+
+    for (let idx = 0; idx < length; idx++) {
+        const currentSegment = segments[idx];
+
+        if (!object) {
+            return;
+        }
+
+        if (currentSegment === ARRAY_WILDCARD) {
+            if (Array.isArray(object)) {
+                return object.map((value, index) => {
+                    const remainingSegments = segments.slice(idx + 1);
+
+                    if (remainingSegments.length > 0) {
+                        return traverse(value, remainingSegments.join(PATH_DELIMITER), callback);
+                    } else {
+                        return callback(object, index, segments, idx);
+                    }
+                });
+            } else {
+                const pathToHere = segments.slice(0, idx).join(PATH_DELIMITER);
+                throw new Error(`Object at wildcard (${pathToHere}) is not an array`);
+            }
+        } else {
+            object = callback(object, currentSegment, segments, idx);
+        }
+    }
+
+    return object;
+}
+
+function isLastSegment(segments, index) {
+    return segments.length === (index + 1);
 }

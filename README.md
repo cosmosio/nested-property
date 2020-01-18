@@ -181,9 +181,13 @@ nestedProperty.isIn(obj, "nested.0.property", true); // true
 CHANGELOG
 =========
 
+### 1.0.4 - 18 JAN 2020
+
+* Fix license field in package.json
+
 ### 1.0.3 - 15 JAN 2020
 
-* replaced usage of `const` with `var` to maintain support of pre-ES6 JS interpreters. Thanks [stefanorie](https://github.com/stefanorie) for the suggestion.
+* replaced usage of `const` with `var` to maintain support of pre-ES6 JS interpreters. Thanks [stefanorie](https://github.com/stefanorie) for the contribution!
 
 ### 1.0.2 - 20 NOV 2019
 

@@ -183,7 +183,7 @@ CHANGELOG
 
 ### 1.0.4 - 18 JAN 2020
 
-* Fix license field in package.json
+* Fix license field in package.json. Thanks [zr87](https://github.com/zr87) for raising the issue!
 
 ### 1.0.3 - 15 JAN 2020
 

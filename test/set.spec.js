@@ -9,7 +9,8 @@ const chai = require("chai");
 
 const expect = chai.expect;
 
-const sut = require("../index");
+const { ENTRYPOINT = "../index" } = process.env;
+const sut = require(ENTRYPOINT);
 
 describe("nested-property.set()", function () {
     describe("Given an undefined value", function () {

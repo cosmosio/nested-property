@@ -10,7 +10,8 @@ const sinon = require("sinon");
 
 const expect = chai.expect;
 
-const sut = require("../index");
+const { ENTRYPOINT = "../index" } = process.env;
+const sut = require(ENTRYPOINT);
 
 describe("nested-property.hasOwn()", function () {
     describe("Given nested-property.has()", function () {

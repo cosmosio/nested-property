@@ -1,3 +1,6 @@
+![npm](https://img.shields.io/npm/dw/nested-property) 
+![Actively Maintained](https://img.shields.io/badge/Maintenance%20Level-Actively%20Maintained-green.svg)
+
 # Nested property
 
 Traverse a deeply nested JS data structure to get, set values, or test if values are part of the data structure.

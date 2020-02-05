@@ -5,7 +5,7 @@ Nested property offers a simple syntax to define a path to access a value with.
 
 For instance:
 
-```
+```js
 const data = { 
   a: {
     b: [
@@ -20,7 +20,7 @@ nestedProperty.get(data, "a.b.1"); // returns 20, or sdata.a.b[1]
 
 The syntax also supports array wildcards to access all items within an array:
 
-```
+```js
 const array = [
   { ssn: "123-456-7890", name: "alice" },
   { ssn: "234-567-8901", name: "bob" },

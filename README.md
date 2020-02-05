@@ -1,23 +1,51 @@
-Nested property
-=============
+# Nested property
 
-Read, write or test a data structure's nested property via a string like 'my.nested.property'. It works through arrays and objects.
+Traverse a deeply nested JS data structure to get, set values, or test if values are part of the data structure.
+Nested property offers a simple syntax to define a path to access a value with.
 
-Installation
-============
+For instance:
+
+```
+const data = { 
+  a: {
+    b: [
+      10,
+      20
+    ]
+  }
+ };
+
+nestedProperty.get(data, "a.b.1"); // returns 20, or sdata.a.b[1]
+```
+
+The syntax also supports array wildcards to access all items within an array:
+
+```
+const array = [
+  { ssn: "123-456-7890", name: "alice" },
+  { ssn: "234-567-8901", name: "bob" },
+  { ssn: "456-789-0123", name: "charlie" }
+]
+
+nestedProperty.set(array, "+.ssn", "<redacted>"); // sets all `ssn` values to <redacted>
+```
+
+
+## Install
 
 ```bash
 npm install nested-property
 ```
 
-How to use
-==========
+## Use
 
 Require nested-property:
 
 ```bash
 var nestedProperty = require("nested-property");
 ```
+
+### nestedProperty.get(data, "path")
 
 __You can get a nested property from an object:__
 
@@ -55,6 +83,20 @@ nestedProperty.get(array, "0.a.b.0"); // returns 0
 nestedProperty.get(array, "1.a.b.c"); // returns undefined
 ```
 
+You may also use wildcards to access multiple values:
+
+```js
+var array = [
+  { a: 0, b: 1, c: 2 },
+  { a: 10, b: 11, c: 12 },
+  { a: 20, b: 21, c: 22 }
+]
+
+nestedProperty.get(array, "+.b"); // returns [1, 11, 21]
+```
+
+### nestedProperty.set(data, "path", value)
+
 __You can set a nested property on an object:__
 
 ```js
@@ -88,21 +130,20 @@ nestedProperty.set(array, "0.a.0", 10); // array[0].a[0] == 10
 nestedProperty.set(array, "0.b.c", 1337); // array[0].b.c == 1337
 ```
 
-Caveat!
+
+You may also use wildcards to set multiple values:
 
 ```js
-var object = {};
-nestedProperty.set(object, "0.1.2", "new object");
+var array = [
+  { a: 0, b: 1, c: 2 },
+  { a: 10, b: 11, c: 12 },
+  { a: 20, b: 21, c: 22 }
+]
 
-// will not create arrays, but objects such as:
-{
-  "0": {
-    "1": {
-      "2": "new object"
-    }
-  }
-}
+nestedProperty.set(array, "+.b", 0); // array[0].b === 0, array[1].b === 0, array[2].b === 0 
 ```
+
+### nestedProperty.has(data, "path")
 
 __You can also test if a data structure has a nested property:__
 
@@ -121,7 +162,7 @@ nestedProperty.has(array, "1.a.0"); // false
 
 The example shows that it works through array, but of course, plain objects are fine too.
 
-If it must be a "own" property (i.e. not in the prototype chain) you can use the own option:
+If it must be an "own" property (i.e. not in the prototype chain) you can use the own option:
 
 ```js
 function DataStructure() {}
@@ -141,7 +182,21 @@ var obj = Object.create({prop: true});
 nestedProperty.hasOwn(obj, "prop"); // false
 ```
 
-___And finally, you can test if an object is on the path to a nested property:___
+Just like other methods, you may also use array wildcards. For instance, testing if any item in an array has a given property:
+
+```js
+var array = [
+  { a: 0, b: 1, c: 2 },
+  { a: 10, b: 11, c: 12, d: 13 },
+  { a: 20, b: 21, c: 22 }
+]
+
+nestedProperty.has(array, "+.d"); // returns true, since array[1].d exists
+```
+
+### nestedProperty.isIn(data, "path", value)
+
+__And finally, you can test if an object is on the path to a nested property:__
 
 ```js
 var obj = {
@@ -159,13 +214,13 @@ nestedProperty.isIn(obj, "nested.0.property", obj.nested[0]); // true
 nestedProperty.isIn(obj, "nested.0.property", {}); // false
 ```
 
-The path doesn't have to be valid to return true:
+The path doesn't have to be completely valid to return true, as long as the value exists within the valid portion.
 
 ```js
 nestedProperty.isIn(obj, "nested.0.property.foo.bar.path", obj.nested[0]); // true
 ```
 
-Unless the `validPath` option is set to `true`:
+Unless the `validPath` option is set to `true`, in this case the full path needs to be valid:
 
 ```js
 nestedProperty.isIn(obj, "nested.0.property.foo.bar.path", obj.nested[0], { validPath: true }); // false
@@ -178,17 +233,18 @@ nestedProperty.isIn(obj, "nested.0.property", obj.nested[0].property); // true
 nestedProperty.isIn(obj, "nested.0.property", true); // true
 ```
 
-CHANGELOG
-=========
+# CHANGELOG
 
-### 2.0.0-beta.1 - 22 JAN 2020
+### 2.0.0-beta1 - 02 FEB 2020
 
 * Add array wildcard `+` to access all properties nested within an array. For example:
 
 ```js
-// sets all `name` property in the array to "<redacteded>"
+// sets all `name` property in the array to "<redacted>"
 nestedProperty.set(array, "+.name", "<redacted>"); 
 ```
+
+Closes [Issue #8](https://github.com/cosmosio/nested-property/issues/8). Thanks [vemuez](https://github.com/vemuez) for the suggestion!
 
 ### 1.0.4 - 18 JAN 2020
 
@@ -233,7 +289,6 @@ Thanks [igor-barbosa](https://github.com/igor-barbosa) for the suggestion: [PR #
 
 * Add has with tests and documentation
 
-LICENSE
-=======
+# LICENSE
 
 MIT

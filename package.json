@@ -1,11 +1,12 @@
 {
   "name": "nested-property",
   "description": "Read, write or test a data structure's nested property via a string like 'my.nested.property'. It works through arrays and objects.'",
-  "version": "2.0.0-beta1",
+  "version": "2.0.0",
   "homepage": "https://github.com/cosmosio/nested-property",
   "license": "MIT",
   "files": [
     "LICENSE",
+    "CHANGELOG",
     "dist/nested-property.js"
   ],
   "author": "Olivier Scherrer <pode.fr@gmail.com>",

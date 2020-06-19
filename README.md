@@ -173,14 +173,14 @@ DataStructure.prototype.prop = true;
 
 var obj = new DataStructure();
 
-nestedProperty.has(obj, "prop", { own: true}); // false
+nestedProperty.has(obj, "prop", { own: true }); // false
 nestedProperty.has(obj, "prop"); // true
 ```
 
 Alternatively, you can use the hasOwn function:
 
 ```js
-var obj = Object.create({prop: true});
+var obj = Object.create({ prop: true });
 
 nestedProperty.hasOwn(obj, "prop"); // false
 ```

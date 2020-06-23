@@ -16,9 +16,14 @@ nestedProperty.set(array, "+.name", "<redacted>");
 
 Closes [Issue #8](https://github.com/cosmosio/nested-property/issues/8). Thanks [vemuez](https://github.com/vemuez) for the suggestion!
 
-### 1.0.5 - 23 JUNE 2020
+### 2.0.1 - 23 JUNE 2020
 
 * Upgrading dev dependencies to fix npm audit issues
+
+### 2.0.0 - 18 FEB 2020
+
+* Add support for array wildcards
+* Add support for older browsers using babel
 
 ### 1.0.4 - 18 JAN 2020
 

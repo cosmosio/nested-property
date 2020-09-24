@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 3.0.0 - 27 SEP 2020
+
+* Prevent mutation of Object.prototype to address a security issue. (Full report coming soon)
+
 ### 2.0.2 - 22 AUG 2020
 
 * Upgrade dependencies to fix vulnerabilites reported by dependa bot

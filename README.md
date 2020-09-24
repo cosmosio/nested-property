@@ -236,6 +236,14 @@ nestedProperty.isIn(obj, "nested.0.property", obj.nested[0].property); // true
 nestedProperty.isIn(obj, "nested.0.property", true); // true
 ```
 
+### nestedProperty.ObjectPrototypeMutationError
+
+__Note that it's not permitted to mutate Object.prototype:__
+
+```
+nestedProperty.set({}, '__protot__.a', 1); // throws nestedProperty.ObjectPrototypeMutationError
+```
+
 # LICENSE
 
 MIT

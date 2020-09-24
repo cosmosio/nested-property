@@ -10,6 +10,15 @@
 const ARRAY_WILDCARD = "+";
 const PATH_DELIMITER = ".";
 
+class ObjectPrototypeMutationError extends Error {
+    constructor(params) {
+        super(params);
+
+        this.name = "ObjectPrototypeMutationError";
+    }
+}
+
+
 module.exports = {
     set: setNestedProperty,
     get: getNestedProperty,
@@ -17,7 +26,8 @@ module.exports = {
     hasOwn: function (object, property, options) {
         return this.has(object, property, options || { own: true });
     },
-    isIn: isInNestedProperty
+    isIn: isInNestedProperty,
+    ObjectPrototypeMutationError
 };
 
 /**
@@ -120,6 +130,10 @@ function setNestedProperty(object, property, value) {
 
     try {
         return traverse(object, property, function _setNestedProperty(currentObject, currentProperty, segments, index) {
+            if (currentObject === Reflect.getPrototypeOf({})) {
+                throw new ObjectPrototypeMutationError("Attempting to mutate Object.prototype");
+            }
+
             if (!currentObject[currentProperty]) {
                 const nextPropIsNumber = Number.isInteger(Number(segments[index + 1]));
                 const nextPropIsArrayWildcard = segments[index + 1] === ARRAY_WILDCARD;
@@ -138,7 +152,12 @@ function setNestedProperty(object, property, value) {
             return currentObject[currentProperty];
         });
     } catch (err) {
-        return object;
+        if (err instanceof ObjectPrototypeMutationError) {
+            // rethrow
+            throw err;
+        } else {
+            return object;
+        }
     }
 }
 

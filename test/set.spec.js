@@ -369,4 +369,33 @@ describe("nested-property.set()", function () {
             });
         });
     });
+
+    describe("When setting a property on an object's prototype", () => {
+        let newObj, protoObj;
+
+        beforeEach(function () {
+            protoObj = {};
+            newObj = Object.create(protoObj);
+
+            sut.set(newObj, "__proto__.a", 1);
+        });
+
+        it("Then mutates the prototype", function () {
+            expect(protoObj.hasOwnProperty("a")).to.be.true;
+        });
+    });
+
+    describe("When setting a property on Object.prototype", () => {
+        let newObj;
+
+        beforeEach(function () {
+            newObj = {};
+        });
+
+        it("Then throws an error", function () {
+            expect(function () {
+                sut.set(newObj, "__proto__.a", 1);
+            }).to.throw(sut.ObjectPrototypeMutationError);
+        });
+    });
 });

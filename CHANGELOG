@@ -1,5 +1,11 @@
 # CHANGELOG
 
+
+### 4.0.0 - 30 SEP 2020
+
+* Add type definitions for typescript projects. Note that this is the loosest definition possible to allow
+typescript projects to compile without errors. Also embeds some useful documentation
+
 ### 3.0.0 - 27 SEP 2020
 
 * Prevent mutation of Object.prototype to address a security issue. (Full report coming soon)

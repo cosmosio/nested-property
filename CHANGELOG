@@ -8,7 +8,7 @@ typescript projects to compile without errors. Also embeds some useful documenta
 
 ### 3.0.0 - 27 SEP 2020
 
-* Prevent mutation of Object.prototype to address a security issue. (Full report coming soon)
+* Prevent mutation of Object.prototype to address a security issue: https://hackerone.com/reports/788883
 
 ### 2.0.2 - 22 AUG 2020
 

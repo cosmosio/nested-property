@@ -124,7 +124,7 @@ function setNestedProperty(object, property, value) {
     }
 
     if (typeof property == "number") {
-        object[property] = value;
+        object[property] = typeof value === "function" ? value(currentObject[currentProperty]) : value;
         return object[property];
     }
 
@@ -146,7 +146,7 @@ function setNestedProperty(object, property, value) {
             }
 
             if (isLastSegment(segments, index)) {
-                currentObject[currentProperty] = value;
+                currentObject[currentProperty] = typeof value === "function" ? value(currentObject[currentProperty]) : value;
             }
 
             return currentObject[currentProperty];

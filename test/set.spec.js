@@ -398,4 +398,24 @@ describe("nested-property.set()", function () {
             }).to.throw(sut.ObjectPrototypeMutationError);
         });
     });
+
+    describe("When setting a property on an object's prototype with function", () => {
+        let newObj, protoObj;
+
+        beforeEach(function () {
+            protoObj = {
+                a: 1
+            };
+            newObj = Object.create(protoObj);
+
+            sut.set(newObj, "__proto__.a", function (value) {
+                return value * 2;
+            });
+        });
+
+        it("Then mutates the prototype", function () {
+            expect(protoObj.hasOwnProperty("a")).to.be.true;
+            expect(protoObj.a).to.be.eql(2);
+        });
+    });
 });
